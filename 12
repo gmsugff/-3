@@ -1,0 +1,131 @@
+namespace bank
+{
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            try
+            {
+                Contribution vklad = Contribution("Иванов Иван", -1000, 12);
+            }
+            catch (ContributionException ex)
+            {
+                Console.WriteLine($"Обработка исключения: {ex.Message}");
+            }
+        }
+        public class bank
+        {
+            public string name { get; set; }
+        }
+
+        public class Branch
+        {
+            public string name { get; set; }
+            public double TSumAmount { get; set; }
+             
+
+        }
+       
+        public class Contribution : Branch
+        {
+            public string fio { get; set; }
+            public double SumAmount { 
+            
+            get { return SumAmount; }
+            set
+            {
+                if (value < 0)
+                {
+                    throw new ContributionException($"Невозможно создать вклад - указана отрицательная сумма вклада: {value}");
+                }
+                    SumAmount = value;
+            }
+            
+            
+            
+            }
+            public int NumberOfMonths { get; set; }
+           
+            public void TheAmountOfTheDeposit(double NumberOfMonths)
+            {
+
+            }
+
+        }
+        public class LongTermContribution : Contribution
+        {
+            public void TheAmountOfTheDeposit(double NumberOfMonths)
+            {
+                try
+                {
+                    if (NumberOfMonths < 0)
+                    {
+                        throw new NumberOfMonthsException("Отрицательное количество месяцев недопустимо");
+                    }
+                    /// <summary>
+                    /// Выполнение расчетов для долгосрочного вклада
+                    /// </summary>
+                    
+                    double sum = 0;
+                for (int i = 0;i< NumberOfMonths; i++)
+                {
+             
+            sum= SumAmount + (SumAmount*16)/100;
+                }
+                Console.WriteLine(sum);
+                TSumAmount += sum;
+                }
+                catch (NumberOfMonthsException ex)
+                {
+                    Console.WriteLine($"Ошибка: {ex.Message}");
+                }
+                
+            }
+        }
+        public class ShortTermContribution : Contribution
+        {
+
+            public void TheAmountOfTheDeposit(double NumberOfMonths)
+            {
+                try
+                {
+                    if (NumberOfMonths < 0)
+                    {
+                        throw new NumberOfMonthsException("Отрицательное количество месяцев недопустимо");
+                    }
+                    /// <summary>
+                    ///  Выполнение расчетов для краткосрочного вклада
+                    /// </summary>
+                    double sum = 0;
+                for (int i = 0; i < NumberOfMonths; i++)
+                {
+
+                    sum = SumAmount + (SumAmount * 3) / 100;
+                }
+                Console.WriteLine(sum);
+                TSumAmount += sum;
+                }
+                catch (NumberOfMonthsException ex)
+                {
+                    Console.WriteLine($"Ошибка: {ex.Message}");
+                }
+                
+            }
+
+        }
+        /// <summary>
+        /// Собственный класс исключения для случаев отрицательного количества месяцев
+        /// </summary>
+        public class NumberOfMonthsException : Exception
+        {
+            public NumberOfMonthsException(string message) : base(message) { }
+        }
+        /// <summary>
+        /// Собственный класс исключения для случаев отрицательной суммы вклада
+        /// </summary>
+        public class ContributionException : Exception
+        {
+            public ContributionException(string message) : base(message) { }
+        }
+    }
+}
